@@ -3,6 +3,11 @@ import router from '@adonisjs/core/services/router'
 import AutoSwagger from 'adonis-autoswagger'
 import swaggerConfig from '#config/swagger'
 
+const UserController = () => import('#controllers/user_controller')
+
+//Register routes
+router.post('/api/register', [UserController, 'register'])
+
 router.get('/', async ({ response }) => {
   return response.redirect('/docs')
 })
