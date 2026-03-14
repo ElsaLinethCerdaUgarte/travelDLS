@@ -10,7 +10,7 @@ export default class extends BaseSchema {
         .integer('tokenable_id')
         .notNullable()
         .unsigned()
-        .references('id')
+        .references('idUser')
         .inTable('users')
         .onDelete('CASCADE')
 
