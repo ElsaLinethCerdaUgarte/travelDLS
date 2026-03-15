@@ -58,7 +58,7 @@ export default class ClientsController {
     const payload = await request.validateUsing(createClientValidator)
 
     try {
-      const client = await this.clientService.create(payload)
+      const client = await this.clientService.create({ data: payload })
       return response.created(client)
     } catch (error: any) {
       return response.unprocessableEntity({ message: error.message })

@@ -14,10 +14,14 @@ export default class ClientService {
   /**
    * Creates a new client.
    */
-  async create(data: {
-    companyName: string
-    ruc: string
-    address: string
+  async create({
+    data,
+  }: {
+    data: {
+      companyName: string
+      ruc: string
+      address: string
+    }
   }): Promise<Client> {
     try {
       const client = await Client.create(data)
@@ -40,10 +44,7 @@ export default class ClientService {
     data: Partial<{ companyName: string; ruc: string; address: string }>
   ): Promise<Client> {
     try {
-      const client = await Client.query()
-        .whereNull('deletedAt')
-        .where('idClient', id)
-        .firstOrFail()
+      const client = await Client.query().whereNull('deletedAt').where('idClient', id).firstOrFail()
 
       client.merge(data)
       await client.save()
@@ -94,10 +95,7 @@ export default class ClientService {
    */
   async findById(id: number): Promise<Client> {
     try {
-      const client = await Client.query()
-        .whereNull('deletedAt')
-        .where('idClient', id)
-        .firstOrFail()
+      const client = await Client.query().whereNull('deletedAt').where('idClient', id).firstOrFail()
 
       return client
     } catch (error: any) {
@@ -114,10 +112,7 @@ export default class ClientService {
    */
   async softDelete(id: number): Promise<void> {
     try {
-      const client = await Client.query()
-        .whereNull('deletedAt')
-        .where('idClient', id)
-        .firstOrFail()
+      const client = await Client.query().whereNull('deletedAt').where('idClient', id).firstOrFail()
 
       client.deletedAt = DateTime.now()
       await client.save()
