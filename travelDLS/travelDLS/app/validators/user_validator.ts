@@ -5,5 +5,6 @@ export const registerValidator = vine.compile(
     name: vine.string().maxLength(255).trim(),
     email: vine.string().email().normalizeEmail(),
     password: vine.string().minLength(8),
+    roleId: vine.number().exists({ table: 'roles', column: 'id' }),
   })
 )

@@ -18,6 +18,6 @@ export default class Rol extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @hasMany(() => User)
+  @hasMany(() => User, { foreignKey: 'roleId' })
   declare users: HasMany<typeof User>
 }

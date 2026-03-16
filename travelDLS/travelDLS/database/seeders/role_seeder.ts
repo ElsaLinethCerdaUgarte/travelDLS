@@ -1,9 +1,12 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
-import Role from '#models/rol'
+import Rol from '#models/rol'
 import { Roles } from '#enums/roles'
+import db from '@adonisjs/lucid/services/db'
 
 export default class extends BaseSeeder {
   async run() {
-    await Role.createMany([{ name: Roles.PROVIDER }, { name: Roles.CLIENT }])
+    await db.rawQuery('TRUNCATE TABLE roles RESTART IDENTITY CASCADE')
+
+    await Rol.createMany([{ name: Roles.DRIVER }, { name: Roles.PROVIDER }, { name: Roles.CLIENT }])
   }
 }

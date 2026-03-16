@@ -4,12 +4,24 @@ import AutoSwagger from 'adonis-autoswagger'
 import swaggerConfig from '#config/swagger'
 
 const UserController = () => import('#controllers/user_controller')
-const RolesController = () => import('#controllers/role_controller')
+//const RolesController = () => import('#controllers/role_controller')
 const ClientsController = () => import('#controllers/client_controller')
 const ProvidersController = () => import('#controllers/providers_controller')
+const DriversController = () => import('#controllers/driver_controller')
 
 //Role routes
-router.post('/api/roles', [RolesController, 'store'])
+//router.post('/api/roles', [RolesController, 'store'])
+
+// Driver routes
+router
+  .group(() => {
+    router.get('/', [DriversController, 'index'])
+    router.get('/:id', [DriversController, 'show'])
+    router.post('/', [DriversController, 'store'])
+    router.put('/:id', [DriversController, 'update'])
+    router.delete('/:id', [DriversController, 'destroy'])
+  })
+  .prefix('/api/drivers')
 
 //Register routes
 router.post('/api/register', [UserController, 'register'])

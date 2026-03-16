@@ -14,7 +14,7 @@ export interface AuthResult {
 @inject()
 export default class UserService {
   async register(
-    data: { name: string; email: string; password: string },
+    data: { name: string; email: string; password: string; roleId: number },
     auth: Authenticator<Authenticators>
   ): Promise<AuthResult> {
     try {
