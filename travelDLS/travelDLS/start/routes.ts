@@ -9,6 +9,7 @@ const ClientsController = () => import('#controllers/client_controller')
 const ProvidersController = () => import('#controllers/providers_controller')
 const DriversController = () => import('#controllers/driver_controller')
 
+//EXMAPLE ROUTE
 //Role routes
 //router.post('/api/roles', [RolesController, 'store'])
 
