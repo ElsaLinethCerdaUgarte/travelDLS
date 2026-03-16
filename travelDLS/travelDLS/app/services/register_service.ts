@@ -14,7 +14,7 @@ export interface AuthResult {
 @inject()
 export default class UserService {
   async register(
-    data: { name: string; email: string; password: string },
+    data: { name: string; email: string; password: string; roleId: number },
     auth: Authenticator<Authenticators>
   ): Promise<AuthResult> {
     try {
@@ -31,7 +31,6 @@ export default class UserService {
       if (error.code === '23505' || error.errno === 19 || error.code === 'ER_DUP_ENTRY') {
         return { success: false, error: 'Email or Name already exists.' }
       }
-      logger.error({ email: data.email, message: error.message }, 'UserService.register failed')
       return { success: false, error: 'Registration failed' }
     }
   }
