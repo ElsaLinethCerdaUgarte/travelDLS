@@ -1,11 +1,14 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo, hasOne } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import Rol from '#models/rol'
+import Driver from '#models/driver'
+import Provider from '#models/provider'
+import Client from '#models/client'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -36,6 +39,15 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true, columnName: 'updated_at' })
   declare updatedAt: DateTime | null
+
+  @hasOne(() => Driver, { foreignKey: 'userId' })
+  declare driver: HasOne<typeof Driver>
+
+  @hasOne(() => Provider, { foreignKey: 'userId' })
+  declare provider: HasOne<typeof Provider>
+
+  @hasOne(() => Client, { foreignKey: 'userId' })
+  declare client: HasOne<typeof Client>
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {
     expiresIn: '30 days',

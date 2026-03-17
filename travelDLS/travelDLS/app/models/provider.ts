@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, hasMany, belongsTo } from '@adonisjs/lucid/orm'
+import type { HasMany, BelongsTo } from '@adonisjs/lucid/types/relations'
 import Driver from '#models/driver'
+import User from '#models/user'
 
 export default class Provider extends BaseModel {
   public static table = 'providers'
@@ -29,6 +30,12 @@ export default class Provider extends BaseModel {
 
   @column.dateTime({ columnName: 'deleted_at' })
   declare deletedAt: DateTime | null
+
+  @column({ columnName: 'user_id' })
+  declare userId: number
+
+  @belongsTo(() => User, { foreignKey: 'userId' })
+  declare user: BelongsTo<typeof User>
 
   @hasMany(() => Driver, { foreignKey: 'idProvider' })
   declare drivers: HasMany<typeof Driver>

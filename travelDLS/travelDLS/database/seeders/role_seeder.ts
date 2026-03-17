@@ -7,6 +7,6 @@ export default class extends BaseSeeder {
   async run() {
     await db.rawQuery('TRUNCATE TABLE roles RESTART IDENTITY CASCADE')
 
-    await Rol.createMany([{ name: Roles.DRIVER }, { name: Roles.PROVIDER }, { name: Roles.CLIENT }])
+    await Rol.createMany([{ name: Roles.DRIVER }, { name: Roles.COMPANY }, { name: Roles.CLIENT }])
   }
 }
