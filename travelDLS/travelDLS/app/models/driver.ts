@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Provider from '#models/provider'
+import User from '#models/user'
 
 export default class Driver extends BaseModel {
   public static table = 'drivers'
@@ -33,6 +34,12 @@ export default class Driver extends BaseModel {
   @column.dateTime({ columnName: 'deleted_at' })
   declare deletedAt: DateTime | null
 
+  @column({ columnName: 'user_id' })
+  declare userId: number
+
   @belongsTo(() => Provider, { foreignKey: 'idProvider' })
   declare provider: BelongsTo<typeof Provider>
+
+  @belongsTo(() => User, { foreignKey: 'userId' })
+  declare user: BelongsTo<typeof User>
 }
