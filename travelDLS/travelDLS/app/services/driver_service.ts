@@ -13,7 +13,7 @@ export default class DriverService {
     data,
   }: {
     data: {
-      idProvider: number
+      idCompany: number
       license: string
       passport: string
       photoUrl?: string
@@ -35,7 +35,7 @@ export default class DriverService {
   async update(
     id: number,
     data: Partial<{
-      idProvider: number
+      idCompany: number
       license: string
       passport: string
       photoUrl: string | null
@@ -67,7 +67,7 @@ export default class DriverService {
       const page = filters.page || 1
       const perPage = filters.perPage || 10
 
-      const query = Driver.query().whereNull('deletedAt').preload('provider')
+      const query = Driver.query().whereNull('deletedAt').preload('company')
 
       return await query.orderBy('idDriver', 'desc').paginate(page, perPage)
     } catch (error: any) {
@@ -84,7 +84,7 @@ export default class DriverService {
       return await Driver.query()
         .whereNull('deletedAt')
         .where('idDriver', id)
-        .preload('provider')
+        .preload('company')
         .firstOrFail()
     } catch (error: any) {
       if (error.code === 'E_ROW_NOT_FOUND') {
