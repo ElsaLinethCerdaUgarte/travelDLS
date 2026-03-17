@@ -8,20 +8,20 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('idDriver')
       table
-        .integer('id_provider')
+        .integer('idCompany')
         .unsigned()
-        .references('idProvider')
-        .inTable('providers')
+        .references('idCompany')
+        .inTable('companies')
         .onDelete('CASCADE')
       table.string('license', 50).notNullable()
       table.string('passport', 50).notNullable()
-      table.string('photo_url').nullable()
+      table.string('photoUrl').nullable()
 
       // Estado como Enum
       table.enum('status', Object.values(DriverStatus)).defaultTo(DriverStatus.INACTIVE)
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
-      table.timestamp('deleted_at').nullable()
+      table.timestamp('createdAt')
+      table.timestamp('updatedAt')
+      table.timestamp('deletedAt').nullable()
     })
   }
 

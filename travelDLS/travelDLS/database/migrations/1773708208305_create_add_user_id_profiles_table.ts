@@ -11,15 +11,6 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
         .after('idDriver')
     })
-    this.schema.alterTable('providers', (table) => {
-      table
-        .integer('user_id')
-        .unsigned()
-        .references('idUser')
-        .inTable('users')
-        .onDelete('CASCADE')
-        .after('idProvider')
-    })
     this.schema.alterTable('clients', (table) => {
       table
         .integer('user_id')
@@ -33,9 +24,6 @@ export default class extends BaseSchema {
 
   async down() {
     this.schema.alterTable('drivers', (table) => {
-      table.dropColumn('user_id')
-    })
-    this.schema.alterTable('providers', (table) => {
       table.dropColumn('user_id')
     })
     this.schema.alterTable('clients', (table) => {

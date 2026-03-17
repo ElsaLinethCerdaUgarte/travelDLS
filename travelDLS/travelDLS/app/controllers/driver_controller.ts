@@ -48,7 +48,7 @@ export default class DriversController {
    * @store
    * @description Creates a new driver
    * @tag Drivers
-   * @requestBody { "idProvider": "number", "license": "string", "passport": "string", "photoUrl": "string?" }
+   * @requestBody { "idCompany": "number", "license": "string", "passport": "string", "photoUrl": "string?" }
    * @responseBody 201 - <Driver>
    * @responseBody 422 - Validation failed
    */
@@ -68,7 +68,7 @@ export default class DriversController {
    * @description Updates an existing driver
    * @tag Drivers
    * @paramPath id - Driver ID - @type(number) @required
-   * @requestBody { "idProvider": "number?", "license": "string?", "passport": "string?", "photoUrl": "string?", "status": "inactive | offline | available | on_trip" }
+   * @requestBody { "idCompany": "number?", "license": "string?", "passport": "string?", "photoUrl": "string?", "status": "inactive | offline | available | on_trip" }
    * @responseBody 200 - <Driver>
    * @responseBody 404 - Driver not found
    * @responseBody 422 - Validation failed
