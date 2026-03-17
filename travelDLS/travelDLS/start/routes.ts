@@ -6,7 +6,7 @@ import swaggerConfig from '#config/swagger'
 const UserController = () => import('#controllers/user_controller')
 //const RolesController = () => import('#controllers/role_controller')
 const ClientsController = () => import('#controllers/client_controller')
-const ProvidersController = () => import('#controllers/providers_controller')
+const CompaniesController = () => import('#controllers/companies_controller')
 const DriversController = () => import('#controllers/driver_controller')
 
 //Role routes
@@ -37,16 +37,16 @@ router
   })
   .prefix('/api/clients')
 
-//Provider routes
+//Company routes
 router
   .group(() => {
-    router.get('/', [ProvidersController, 'index'])
-    router.get('/:id', [ProvidersController, 'show'])
-    router.post('/', [ProvidersController, 'store'])
-    router.put('/:id', [ProvidersController, 'update'])
-    router.delete('/:id', [ProvidersController, 'destroy'])
+    router.get('/', [CompaniesController, 'index'])
+    router.get('/:id', [CompaniesController, 'show'])
+    router.post('/', [CompaniesController, 'store'])
+    router.put('/:id', [CompaniesController, 'update'])
+    router.delete('/:id', [CompaniesController, 'destroy'])
   })
-  .prefix('/api/providers')
+  .prefix('/api/companies')
 
 router.get('/', async ({ response }) => {
   return response.redirect('/docs')

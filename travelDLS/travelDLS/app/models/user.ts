@@ -7,7 +7,7 @@ import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import Rol from '#models/rol'
 import Driver from '#models/driver'
-import Provider from '#models/provider'
+import Company from '#models/company'
 import Client from '#models/client'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
@@ -43,8 +43,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasOne(() => Driver, { foreignKey: 'userId' })
   declare driver: HasOne<typeof Driver>
 
-  @hasOne(() => Provider, { foreignKey: 'userId' })
-  declare provider: HasOne<typeof Provider>
+  @hasOne(() => Company, { foreignKey: 'idUser' })
+  declare company: HasOne<typeof Company>
 
   @hasOne(() => Client, { foreignKey: 'userId' })
   declare client: HasOne<typeof Client>
