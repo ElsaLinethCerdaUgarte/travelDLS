@@ -3,7 +3,7 @@ import { DriverStatus } from '#enums/driver_status'
 
 export const createDriverValidator = vine.compile(
   vine.object({
-    idProvider: vine.number().exists({ table: 'providers', column: 'idProvider' }),
+    idCompany: vine.number().exists({ table: 'companies', column: 'idCompany' }),
     license: vine.string().trim().minLength(5),
     passport: vine.string().trim().minLength(5),
     photoUrl: vine.string().url().optional(),
@@ -13,7 +13,7 @@ export const createDriverValidator = vine.compile(
 
 export const updateDriverValidator = vine.compile(
   vine.object({
-    idProvider: vine.number().exists({ table: 'providers', column: 'idProvider' }).optional(),
+    idCompany: vine.number().exists({ table: 'companies', column: 'idCompany' }).optional(),
     license: vine.string().trim().minLength(5).optional(),
     passport: vine.string().trim().minLength(5).optional(),
     photoUrl: vine.string().url().optional(),

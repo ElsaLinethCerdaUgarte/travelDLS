@@ -32,4 +32,10 @@ export default class Client extends BaseModel {
 
   @belongsTo(() => User, { foreignKey: 'userId' })
   declare user: BelongsTo<typeof User>
+
+  @column({ columnName: 'photo_url' })
+  declare photoUrl: string | null
+
+  @column({ columnName: 'type_client' })
+  declare typeClient: string
 }
