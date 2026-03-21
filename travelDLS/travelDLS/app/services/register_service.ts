@@ -28,7 +28,7 @@ export default class UserService {
         user,
       }
     } catch (error: any) {
-      if (error.code === '23505' || error.errno === 19 || error.code === 'ER_DUP_ENTRY') {
+      if (error.code === '23505') {
         return { success: false, error: 'Email or Name already exists.' }
       }
       return { success: false, error: 'Registration failed' }
