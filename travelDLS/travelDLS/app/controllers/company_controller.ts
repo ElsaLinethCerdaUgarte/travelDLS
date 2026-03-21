@@ -14,7 +14,7 @@ export default class CompaniesController {
    * @paramQuery page - Page number - @type(number)
    * @paramQuery perPage - Items per page - @type(number)
    * @paramQuery search - Search by businessName or ruc - @type(string)
-   * @responseBody 200 - <Company[]>.paginated()
+   * @responseBody 200 - Paginador de empresas
    */
   async index({ request, response }: HttpContext) {
     const page = request.input('page', 1)
@@ -34,15 +34,15 @@ export default class CompaniesController {
    * @description Finds a company by ID
    * @tag Companies
    * @paramPath id - Company ID - @type(number) @required
-   * @responseBody 200 - <Company>
+   * @responseBody 200 - Objeto de empresa
    * @responseBody 404 - Company not found
    */
   async show({ params, response }: HttpContext) {
     try {
       const company = await this.companyService.findById(params.id)
       return response.ok(company)
-    } catch {
-      return response.notFound({ message: 'Company not found.' })
+    } catch (error: any) {
+      return response.notFound({ message: error.message })
     }
   }
 
@@ -50,15 +50,15 @@ export default class CompaniesController {
    * @store
    * @description Creates a new company
    * @tag Companies
-   * @requestBody { "ruc": "string", "businessName": "string" }
+   * @requestBody { "userId": "number?", "businessName": "string", "ruc": "string", "photoUrl": "string?" }
    * @responseBody 201 - <Company>
    * @responseBody 422 - Validation failed
    */
   async store({ request, response }: HttpContext) {
-    const payload = await request.validateUsing(createCompanyValidator)
+    const data = await request.validateUsing(createCompanyValidator)
 
     try {
-      const company = await this.companyService.create({ data: payload })
+      const company = await this.companyService.create({ data })
       return response.created(company)
     } catch (error: any) {
       return response.unprocessableEntity({ message: error.message })
@@ -70,16 +70,16 @@ export default class CompaniesController {
    * @description Updates an existing company
    * @tag Companies
    * @paramPath id - Company ID - @type(number) @required
-   * @requestBody { "ruc": "string", "businessName": "string" }
+   * @requestBody { "userId": "number?", "businessName": "string?", "ruc": "string?", "photoUrl": "string?" }
    * @responseBody 200 - <Company>
    * @responseBody 404 - Company not found
    * @responseBody 422 - Validation failed
    */
   async update({ params, request, response }: HttpContext) {
-    const payload = await request.validateUsing(updateCompanyValidator)
+    const data = await request.validateUsing(updateCompanyValidator)
 
     try {
-      const company = await this.companyService.update(params.id, payload)
+      const company = await this.companyService.update(params.id, data)
       return response.ok(company)
     } catch (error: any) {
       if (error.message === 'Company not found.') {

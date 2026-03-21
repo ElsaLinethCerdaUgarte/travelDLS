@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .references('idUser')
         .inTable('users')
         .onDelete('CASCADE')
-        .nullable() // Depending on if it must have a user on creation
+        .nullable()
 
       table.string('ruc', 20).notNullable().unique()
       table.string('businessName', 255).notNullable()
