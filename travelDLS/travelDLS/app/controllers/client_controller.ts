@@ -14,15 +14,17 @@ export default class ClientsController {
    * @paramQuery page - Page number - @type(number)
    * @paramQuery perPage - Items per page - @type(number)
    * @paramQuery search - Search by companyName or ruc - @type(string)
-   * @responseBody 200 - <Client[]>.paginated()
+   * @paramQuery typeClient - Filter by client type (legal, natural) - @type(string)
+   * @responseBody 200 - Paginador de clientes
    */
   async index({ request, response }: HttpContext) {
     const page = request.input('page', 1)
     const perPage = request.input('perPage', 10)
     const search = request.input('search')
+    const typeClient = request.input('typeClient')
 
     try {
-      const clients = await this.clientService.list({ page, perPage, search })
+      const clients = await this.clientService.list({ page, perPage, search, typeClient })
       return response.ok(clients)
     } catch {
       return response.internalServerError({ message: 'Failed to retrieve clients.' })
@@ -34,7 +36,7 @@ export default class ClientsController {
    * @description Finds a client by ID
    * @tag Clients
    * @paramPath id - Client ID - @type(number) @required
-   * @responseBody 200 - <Client>
+   * @responseBody 200 - Objeto de cliente
    * @responseBody 404 - Client not found
    */
   async show({ params, response }: HttpContext) {
@@ -50,15 +52,17 @@ export default class ClientsController {
    * @store
    * @description Creates a new client
    * @tag Clients
-   * @requestBody { "companyName": "string", "ruc": "string", "address": "string" }
+   * @requestBody { "userId":"number","companyName": "string", "ruc": "string", "address": "string", "photoUrl": "string?", "typeClient": "legal | natural" }
    * @responseBody 201 - <Client>
    * @responseBody 422 - Validation failed
    */
   async store({ request, response }: HttpContext) {
-    const payload = await request.validateUsing(createClientValidator)
+    const data = await request.validateUsing(createClientValidator)
 
     try {
-      const client = await this.clientService.create({ data: payload })
+      const client = await this.clientService.create({
+        data,
+      })
       return response.created(client)
     } catch (error: any) {
       return response.unprocessableEntity({ message: error.message })
@@ -70,16 +74,16 @@ export default class ClientsController {
    * @description Updates an existing client
    * @tag Clients
    * @paramPath id - Client ID - @type(number) @required
-   * @requestBody { "companyName": "string?", "ruc": "string?", "address": "string?" }
+   * @requestBody { "companyName": "string?", "ruc": "string?", "address": "string?", "photoUrl": "string?", "typeClient": "legal | natural" }
    * @responseBody 200 - <Client>
    * @responseBody 404 - Client not found
    * @responseBody 422 - Validation failed
    */
   async update({ params, request, response }: HttpContext) {
-    const payload = await request.validateUsing(updateClientValidator)
+    const data = await request.validateUsing(updateClientValidator)
 
     try {
-      const client = await this.clientService.update(params.id, payload)
+      const client = await this.clientService.update(params.id, data)
       return response.ok(client)
     } catch (error: any) {
       if (error.message === 'Client not found.') {
