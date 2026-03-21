@@ -16,6 +16,9 @@ export default class Company extends BaseModel {
   @column({ columnName: 'businessName' })
   declare businessName: string
 
+  @column.dateTime({ autoCreate: true, columnName: 'createdAt' })
+  declare createdAt: DateTime
+
   @column.dateTime({ autoCreate: true, autoUpdate: true, columnName: 'updatedAt' })
   declare updatedAt: DateTime
 

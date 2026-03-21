@@ -6,17 +6,16 @@ import { DriverStatus } from '#enums/driver_status'
 
 @inject()
 export default class DriverService {
-  /**
-   * Creates a new driver.
-   */
   async create({
     data,
   }: {
     data: {
       idCompany: number
+      userId: number
       license: string
       passport: string
       photoUrl?: string
+      status: DriverStatus
     }
   }): Promise<Driver> {
     try {
@@ -29,13 +28,11 @@ export default class DriverService {
     }
   }
 
-  /**
-   * Updates an existing driver by ID.
-   */
   async update(
     id: number,
     data: Partial<{
       idCompany: number
+      userId: number
       license: string
       passport: string
       photoUrl: string | null
@@ -59,15 +56,20 @@ export default class DriverService {
     }
   }
 
-  /**
-   * Lists drivers with pagination.
-   */
-  async list(filters: { page?: number; perPage?: number } = {}) {
+  async list(
+    filters: { page?: number; perPage?: number; status?: string; idCompany?: number } = {}
+  ) {
     try {
       const page = filters.page || 1
       const perPage = filters.perPage || 10
-
       const query = Driver.query().whereNull('deletedAt').preload('company')
+
+      if (filters.status) {
+        query.where('status', filters.status)
+      }
+      if (filters.idCompany) {
+        query.where('idCompany', filters.idCompany)
+      }
 
       return await query.orderBy('idDriver', 'desc').paginate(page, perPage)
     } catch (error: any) {
@@ -76,16 +78,14 @@ export default class DriverService {
     }
   }
 
-  /**
-   * Finds a single driver by ID.
-   */
   async findById(id: number): Promise<Driver> {
     try {
-      return await Driver.query()
+      const driver = await Driver.query()
         .whereNull('deletedAt')
         .where('idDriver', id)
         .preload('company')
         .firstOrFail()
+      return driver
     } catch (error: any) {
       if (error.code === 'E_ROW_NOT_FOUND') {
         throw new Error('Driver not found.')
@@ -95,9 +95,6 @@ export default class DriverService {
     }
   }
 
-  /**
-   * Soft deletes a driver.
-   */
   async softDelete(id: number): Promise<void> {
     try {
       const driver = await this.findById(id)

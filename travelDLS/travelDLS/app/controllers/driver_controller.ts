@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 import DriverService from '#services/driver_service'
 import { createDriverValidator, updateDriverValidator } from '#validators/driver_validator'
+import { DriverStatus } from '#enums/driver_status'
 
 @inject()
 export default class DriversController {
@@ -13,14 +14,18 @@ export default class DriversController {
    * @tag Drivers
    * @paramQuery page - Page number - @type(number)
    * @paramQuery perPage - Items per page - @type(number)
-   * @responseBody 200 - <Driver[]>.paginated()
+   * @paramQuery status - Optional driver status - @type(string)
+   * @paramQuery idCompany - Optional company ID - @type(number)
+   * @responseBody 200 - Paginador de conductores
    */
   async index({ request, response }: HttpContext) {
     const page = request.input('page', 1)
     const perPage = request.input('perPage', 10)
+    const status = request.input('status')
+    const idCompany = request.input('idCompany')
 
     try {
-      const drivers = await this.driverService.list({ page, perPage })
+      const drivers = await this.driverService.list({ page, perPage, status, idCompany })
       return response.ok(drivers)
     } catch {
       return response.internalServerError({ message: 'Failed to retrieve drivers.' })
@@ -32,7 +37,7 @@ export default class DriversController {
    * @description Finds a driver by ID
    * @tag Drivers
    * @paramPath id - Driver ID - @type(number) @required
-   * @responseBody 200 - <Driver>
+   * @responseBody 200 - Objeto de conductor
    * @responseBody 404 - Driver not found
    */
   async show({ params, response }: HttpContext) {
@@ -48,7 +53,7 @@ export default class DriversController {
    * @store
    * @description Creates a new driver
    * @tag Drivers
-   * @requestBody { "idCompany": "number", "license": "string", "passport": "string", "photoUrl": "string?" }
+   * @requestBody { "idCompany": "number", "userId": "number", "license": "string", "passport": "string", "photoUrl": "string?" }
    * @responseBody 201 - <Driver>
    * @responseBody 422 - Validation failed
    */
@@ -56,7 +61,12 @@ export default class DriversController {
     const data = await request.validateUsing(createDriverValidator)
 
     try {
-      const driver = await this.driverService.create({ data })
+      const driver = await this.driverService.create({
+        data: {
+          ...data,
+          status: data.status || DriverStatus.OFFLINE,
+        },
+      })
       return response.created(driver)
     } catch (error: any) {
       return response.unprocessableEntity({ message: error.message })
@@ -68,7 +78,7 @@ export default class DriversController {
    * @description Updates an existing driver
    * @tag Drivers
    * @paramPath id - Driver ID - @type(number) @required
-   * @requestBody { "idCompany": "number?", "license": "string?", "passport": "string?", "photoUrl": "string?", "status": "inactive | offline | available | on_trip" }
+   * @requestBody { "idCompany": "number?", "userId": "number?", "license": "string?", "passport": "string?", "photoUrl": "string?", "status": "inactive | offline | available | on_trip" }
    * @responseBody 200 - <Driver>
    * @responseBody 404 - Driver not found
    * @responseBody 422 - Validation failed
