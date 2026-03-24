@@ -10,7 +10,7 @@ export default class Company extends BaseModel {
   @column({ isPrimary: true, columnName: 'idCompany' })
   declare idCompany: number
 
-  @column()
+  @column({ columnName: 'ruc' })
   declare ruc: string
 
   @column({ columnName: 'businessName' })
@@ -26,7 +26,7 @@ export default class Company extends BaseModel {
   declare deletedAt: DateTime | null
 
   @column({ columnName: 'idUser' })
-  declare idUser: number | null
+  declare userId: number | null
 
   @belongsTo(() => User, { foreignKey: 'idUser' })
   declare user: BelongsTo<typeof User>

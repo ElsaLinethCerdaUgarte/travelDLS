@@ -15,10 +15,10 @@ export default class CompanyService {
     data,
   }: {
     data: {
-      ruc: string
-      businessName: string
-      photoUrl?: string | null
       userId?: number
+      businessName: string
+      ruc: string
+      photoUrl?: string | null
     }
   }): Promise<Company> {
     try {
@@ -37,10 +37,10 @@ export default class CompanyService {
   async update(
     id: number,
     data: Partial<{
-      ruc: string
-      businessName: string
-      photoUrl: string | null
       userId: number
+      businessName: string
+      ruc: string
+      photoUrl: string | null
     }>
   ): Promise<Company> {
     try {
