@@ -26,7 +26,7 @@ export default class Company extends BaseModel {
   declare deletedAt: DateTime | null
 
   @column({ columnName: 'idUser' })
-  declare idUser: number | null
+  declare userId: number | null
 
   @belongsTo(() => User, { foreignKey: 'idUser' })
   declare user: BelongsTo<typeof User>
