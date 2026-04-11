@@ -10,6 +10,8 @@ const CompaniesController = () => import('#controllers/company_controller')
 const DriversController = () => import('#controllers/driver_controller')
 const CategoriesController = () => import('#controllers/category_controller')
 const TrucksController = () => import('#controllers/truck_controller')
+const OrdersController = () => import('#controllers/order_controller')
+const DetailsOrderController = () => import('#controllers/detail_order_controller')
 
 //Role routes
 //router.post('/api/roles', [RolesController, 'store'])
@@ -71,6 +73,27 @@ router
     router.delete('/:id', [CategoriesController, 'destroy'])
   })
   .prefix('/api/categories')
+
+// Order routes
+router
+  .group(() => {
+    router.get('/', [OrdersController, 'index'])
+    router.get('/:id', [OrdersController, 'show'])
+    router.post('/', [OrdersController, 'store'])
+    router.put('/:id', [OrdersController, 'update'])
+    router.delete('/:id', [OrdersController, 'destroy'])
+  })
+  .prefix('/api/orders')
+
+// Details order routes
+router
+  .group(() => {
+    router.post('/', [DetailsOrderController, 'store'])
+    router.get('/:id', [DetailsOrderController, 'show'])
+    router.put('/:id', [DetailsOrderController, 'update'])
+    router.delete('/:id', [DetailsOrderController, 'destroy'])
+  })
+  .prefix('/api/order-details')
 
 router.get('/', async ({ response }) => {
   return response.redirect('/docs')
