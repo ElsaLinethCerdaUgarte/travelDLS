@@ -1,0 +1,24 @@
+import vine from '@vinejs/vine'
+import { PackagingType } from '#enums/orders_packaging_type'
+
+export const createDetailsOrderValidator = vine.compile(
+  vine.object({
+    idOrder: vine.number().exists({ table: 'orders', column: 'idOrder' }),
+    cargoDescription: vine.string().trim().minLength(3).maxLength(255),
+    amount: vine.number().positive(),
+    unitWeight: vine.string().trim().maxLength(50),
+    deliveryAddress: vine.string().trim().minLength(5).maxLength(255),
+    typePackaging: vine.enum(Object.values(PackagingType)),
+  })
+)
+
+export const updateDetailsOrderValidator = vine.compile(
+  vine.object({
+    idOrder: vine.number().exists({ table: 'orders', column: 'idOrder' }).optional(),
+    cargoDescription: vine.string().trim().minLength(3).maxLength(255).optional(),
+    amount: vine.number().positive().optional(),
+    unitWeight: vine.string().trim().maxLength(50).optional(),
+    deliveryAddress: vine.string().trim().minLength(5).maxLength(255).optional(),
+    typePackaging: vine.enum(Object.values(PackagingType)).optional(),
+  })
+)
