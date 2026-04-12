@@ -10,7 +10,6 @@ export default class RolesController {
    * @index
    * @description Lists all roles in the system
    * @tag Roles
-   * @security [BearerAuth]
    * @responseBody 200 - <Rol>
    */
   async index({ response }: HttpContext) {

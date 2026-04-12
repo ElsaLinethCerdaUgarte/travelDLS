@@ -1,14 +1,15 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, belongsTo, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo, hasOne, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne, HasMany } from '@adonisjs/lucid/types/relations'
 import Rol from '#models/rol'
 import Driver from '#models/driver'
 import Company from '#models/company'
 import Client from '#models/client'
+import PasswordResetToken from '#models/password_reset_tokens'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -48,6 +49,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasOne(() => Client, { foreignKey: 'userId' })
   declare client: HasOne<typeof Client>
+
+  @hasMany(() => PasswordResetToken, { foreignKey: 'userId' })
+  declare passwordResetTokens: HasMany<typeof PasswordResetToken>
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {
     expiresIn: '30 days',
