@@ -4,6 +4,7 @@ import type { HasMany, BelongsTo } from '@adonisjs/lucid/types/relations'
 import Driver from '#models/driver'
 import User from '#models/user'
 import Truck from '#models/truck'
+import Order from '#models/order'
 
 export default class Company extends BaseModel {
   public static table = 'companies'
@@ -29,15 +30,18 @@ export default class Company extends BaseModel {
   @column({ columnName: 'idUser' })
   declare userId: number | null
 
+  @column({ columnName: 'photo_url' })
+  declare photoUrl: string | null
+
   @belongsTo(() => User, { foreignKey: 'idUser' })
   declare user: BelongsTo<typeof User>
 
   @hasMany(() => Driver, { foreignKey: 'idCompany' })
   declare drivers: HasMany<typeof Driver>
 
-  @column({ columnName: 'photo_url' })
-  declare photoUrl: string | null
-
   @hasMany(() => Truck, { foreignKey: 'idCompany' })
   declare trucks: HasMany<typeof Truck>
+
+  @hasMany(() => Order, { foreignKey: 'idCompany' })
+  declare orders: HasMany<typeof Order>
 }

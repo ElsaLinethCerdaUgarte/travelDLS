@@ -50,7 +50,7 @@ export default class OrdersController {
    * @store
    * @description Creates a new order header
    * @tag Orders
-   * @requestBody { "idClient": "number", "idDriver": "number", "status": "string?" }
+   * @requestBody { "idClient": "number", "idCompany": "number", "status": "pendiente" }
    * @responseBody 201 - <Order>
    * @responseBody 422 - Validation failed
    */
@@ -70,7 +70,7 @@ export default class OrdersController {
    * @description Updates an existing order header
    * @tag Orders
    * @paramPath id - Order ID - @type(number) @required
-   * @requestBody { "idClient": "number?", "idDriver": "number?", "status": "string?" }
+   * @requestBody { "idClient": "number?", "idCompany": "number?", "status": "pendiente" }
    * @responseBody 200 - <Order>
    * @responseBody 404 - Order not found
    * @responseBody 422 - Validation failed

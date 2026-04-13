@@ -7,6 +7,7 @@ import DetailsOrder from '#models/details_order'
 export default class DetailsOrderService {
   async create(data: {
     idOrder: number
+    idDriver?: number | null
     cargoDescription: string
     amount: number
     unitWeight: string
@@ -26,6 +27,7 @@ export default class DetailsOrderService {
   async update(
     id: number,
     data: Partial<{
+      idDriver: number | null
       cargoDescription: string
       amount: number
       unitWeight: string
@@ -55,7 +57,11 @@ export default class DetailsOrderService {
 
   async findById(id: number): Promise<DetailsOrder> {
     try {
-      return await DetailsOrder.query().whereNull('deletedAt').where('idDetails', id).firstOrFail()
+      return await DetailsOrder.query()
+        .whereNull('deletedAt')
+        .where('idDetails', id)
+        .preload('driver')
+        .firstOrFail()
     } catch (error: any) {
       if (error.code === 'E_ROW_NOT_FOUND') {
         throw new Error('Detail not found.')
