@@ -12,9 +12,9 @@ export default class DetailsOrdersController {
 
   /**
    * @store
-   * @description Adds a new item detail to an order
+   * @description Agrega un nuevo detalle de carga a una orden.
    * @tag OrderDetails
-   * @requestBody { "idOrder": "number", "cargoDescription": "string", "amount": "number", "unitWeight": "string", "deliveryAddress": "string", "typePackaging": "string" }
+   * @requestBody { "idOrder": "number", "idDriver": "number?", "cargoDescription": "string", "amount": "number", "unitWeight": "string", "deliveryAddress": "string", "typePackaging": "pallet" }
    * @responseBody 201 - <DetailsOrder>
    * @responseBody 422 - Validation failed
    */
@@ -31,9 +31,9 @@ export default class DetailsOrdersController {
 
   /**
    * @show
-   * @description Finds a specific order detail by ID
+   * @description Busca un detalle específico por ID (incluye datos del conductor si existe)
    * @tag OrderDetails
-   * @paramPath id - Detail ID - @type(number) @required
+   * @paramPath id - ID del detalle - @type(number) @required
    * @responseBody 200 - Objeto de detalle
    * @responseBody 404 - Detail not found
    */
@@ -48,10 +48,10 @@ export default class DetailsOrdersController {
 
   /**
    * @update
-   * @description Updates a specific order detail item
+   * @description Actualiza los datos de la carga o asigna/cambia al conductor
    * @tag OrderDetails
-   * @paramPath id - Detail ID - @type(number) @required
-   * @requestBody { "cargoDescription": "string?", "amount": "number?", "unitWeight": "string?", "deliveryAddress": "string?", "typePackaging": "string?" }
+   * @paramPath id - ID del detalle - @type(number) @required
+   * @requestBody { "idDriver": "number?", "cargoDescription": "string?", "amount": "number?", "unitWeight": "string?", "deliveryAddress": "string?", "typePackaging": "pallet" }
    * @responseBody 200 - <DetailsOrder>
    * @responseBody 404 - Detail not found
    * @responseBody 422 - Validation failed
@@ -72,9 +72,9 @@ export default class DetailsOrdersController {
 
   /**
    * @destroy
-   * @description Soft-deletes a specific order detail
+   * @description Borrado lógico de un detalle de orden
    * @tag OrderDetails
-   * @paramPath id - Detail ID - @type(number) @required
+   * @paramPath id - ID del detalle - @type(number) @required
    * @responseBody 200 - { "message": "Detail removed successfully." }
    * @responseBody 404 - Detail not found
    */

@@ -6,7 +6,11 @@ import { OrderStatus } from '#enums/order_status'
 
 @inject()
 export default class OrderService {
-  async create(data: { idClient: number; idDriver: number; status?: OrderStatus }): Promise<Order> {
+  async create(data: {
+    idClient: number
+    idCompany: number
+    status?: OrderStatus
+  }): Promise<Order> {
     try {
       const order = await Order.create(data)
       logger.info({ idOrder: order.idOrder }, 'Order header created successfully')
@@ -19,12 +23,14 @@ export default class OrderService {
 
   async update(
     id: number,
-    data: Partial<{ idClient: number; idDriver: number; status: OrderStatus }>
+    data: Partial<{ idClient: number; idCompany: number; status: OrderStatus }>
   ): Promise<Order> {
     try {
       const order = await Order.query().whereNull('deletedAt').where('idOrder', id).firstOrFail()
+
       order.merge(data)
       await order.save()
+
       logger.info({ idOrder: order.idOrder }, 'Order updated successfully')
       return order
     } catch (error: any) {
@@ -43,11 +49,13 @@ export default class OrderService {
       const query = Order.query()
         .whereNull('deletedAt')
         .preload('client')
-        .preload('driver')
-        .preload('details')
+        .preload('company')
+        .preload('details', (detailsQuery) => {
+          detailsQuery.preload('driver')
+        })
 
       if (filters.idClient) {
-        query.where('id_client', filters.idClient)
+        query.where('idClient', filters.idClient)
       }
 
       return await query.orderBy('idOrder', 'desc').paginate(page, perPage)
@@ -63,8 +71,10 @@ export default class OrderService {
         .whereNull('deletedAt')
         .where('idOrder', id)
         .preload('client')
-        .preload('driver')
-        .preload('details')
+        .preload('company')
+        .preload('details', (detailsQuery) => {
+          detailsQuery.preload('driver')
+        })
         .firstOrFail()
     } catch (error: any) {
       if (error.code === 'E_ROW_NOT_FOUND') {
@@ -75,9 +85,6 @@ export default class OrderService {
     }
   }
 
-  /**
-   * Borrado lógico
-   */
   async softDelete(id: number): Promise<void> {
     try {
       const order = await this.findById(id)

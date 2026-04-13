@@ -4,6 +4,7 @@ import { PackagingType } from '#enums/orders_packaging_type'
 export const createDetailsOrderValidator = vine.compile(
   vine.object({
     idOrder: vine.number().exists({ table: 'orders', column: 'idOrder' }),
+    idDriver: vine.number().exists({ table: 'drivers', column: 'idDriver' }).optional(),
     cargoDescription: vine.string().trim().minLength(3).maxLength(255),
     amount: vine.number().positive(),
     unitWeight: vine.string().trim().maxLength(50),
@@ -15,6 +16,7 @@ export const createDetailsOrderValidator = vine.compile(
 export const updateDetailsOrderValidator = vine.compile(
   vine.object({
     idOrder: vine.number().exists({ table: 'orders', column: 'idOrder' }).optional(),
+    idDriver: vine.number().exists({ table: 'drivers', column: 'idDriver' }).optional(),
     cargoDescription: vine.string().trim().minLength(3).maxLength(255).optional(),
     amount: vine.number().positive().optional(),
     unitWeight: vine.string().trim().maxLength(50).optional(),
