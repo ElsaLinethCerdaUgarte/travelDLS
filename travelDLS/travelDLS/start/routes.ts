@@ -52,7 +52,6 @@ router
   .group(() => {
     router.get('/', [DriversController, 'index'])
     router.get('/:id', [DriversController, 'show'])
-    router.post('/', [DriversController, 'store'])
     router.delete('/:id', [DriversController, 'destroy'])
   })
   .prefix('/api/drivers')
@@ -61,6 +60,9 @@ router
 router
   .put('/api/drivers/:id', [DriversController, 'update'])
   .use([middleware.auth(), middleware.roleGuard(['driver', 'company'])])
+router
+  .post('/api/drivers', [DriversController, 'store'])
+  .use([middleware.auth(), middleware.roleGuard(['company', 'driver'])])
 
 //Register routes
 router
@@ -72,7 +74,6 @@ router
   .group(() => {
     router.get('/', [ClientsController, 'index'])
     router.get('/:id', [ClientsController, 'show'])
-    router.post('/', [ClientsController, 'store'])
     router.delete('/:id', [ClientsController, 'destroy'])
   })
   .prefix('/api/clients')
@@ -81,11 +82,13 @@ router
 router
   .put('/api/clients/:id', [ClientsController, 'update'])
   .use([middleware.auth(), middleware.roleGuard(['client'])])
+router
+  .post('/api/clients', [ClientsController, 'store'])
+  .use([middleware.auth(), middleware.roleGuard(['platform_admin', 'client'])])
 
 //Company routes
 router
   .group(() => {
-    router.post('/', [CompaniesController, 'store'])
     router.delete('/:id', [CompaniesController, 'destroy'])
   })
   .prefix('/api/companies')
@@ -100,6 +103,10 @@ router
 
 router
   .put('/api/companies/:id', [CompaniesController, 'update'])
+  .use([middleware.auth(), middleware.roleGuard(['platform_admin', 'company'])])
+
+router
+  .post('/api/companies', [CompaniesController, 'store'])
   .use([middleware.auth(), middleware.roleGuard(['platform_admin', 'company'])])
 
 // Category routes
