@@ -44,7 +44,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasOne(() => Driver, { foreignKey: 'userId' })
   declare driver: HasOne<typeof Driver>
 
-  @hasOne(() => Company, { foreignKey: 'idUser' })
+  @hasOne(() => Company, { foreignKey: 'userId' })
   declare company: HasOne<typeof Company>
 
   @hasOne(() => Client, { foreignKey: 'userId' })
