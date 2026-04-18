@@ -35,7 +35,7 @@ export default class extends BaseSeeder {
         ruc: data.ruc,
         businessName: data.businessName,
         photoUrl: data.photoUrl,
-        idUser: user.idUser,
+        userId: user.idUser,
       })
     }
   }

@@ -11,6 +11,7 @@ export default class CookieAuthMiddleware {
 
     if (tokenFromCookie && !request.header('authorization')) {
       request.request.headers['authorization'] = `Bearer ${tokenFromCookie}`
+      request.headers()['authorization'] = `Bearer ${tokenFromCookie}`
     }
 
     return next()

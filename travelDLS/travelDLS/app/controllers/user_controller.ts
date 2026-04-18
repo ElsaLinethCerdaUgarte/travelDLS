@@ -11,7 +11,6 @@ export default class UsersController {
    * @register
    * @description Registers a new user into the system
    * @tag Auth
-   * @security [BearerAuth]
    * @requestBody { "name": "string", "email": "string", "password": "string", "roleId": "number" }
    * @responseBody 201 - <User>
    * @responseBody 422 - Validation failed
