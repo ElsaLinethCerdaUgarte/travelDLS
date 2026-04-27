@@ -27,6 +27,7 @@ router
     router.post('/reset-password', [AuthController, 'resetPassword'])
     // Logout requiere auth — el CookieAuthMiddleware ya inyecta el token automáticamente
     router.post('/logout', [AuthController, 'logout']).use(middleware.auth())
+    router.get('/me', [AuthController, 'me']).use(middleware.auth())
   })
   .prefix('/api/auth')
 
@@ -45,7 +46,7 @@ router
     router.delete('/:id', [TrucksController, 'destroy'])
   })
   .prefix('/api/trucks')
-  .use([middleware.auth(), middleware.roleGuard(['company'])])
+  .use([middleware.auth(), middleware.roleGuard(['company', 'platform_admin'])])
 
 // Driver routes
 router

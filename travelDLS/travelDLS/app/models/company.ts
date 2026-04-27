@@ -33,7 +33,7 @@ export default class Company extends BaseModel {
   @column({ columnName: 'photo_url' })
   declare photoUrl: string | null
 
-  @belongsTo(() => User, { foreignKey: 'idUser' })
+  @belongsTo(() => User, { foreignKey: 'userId' })
   declare user: BelongsTo<typeof User>
 
   @hasMany(() => Driver, { foreignKey: 'idCompany' })

@@ -135,4 +135,38 @@ export default class AuthController {
 
     return response.ok({ message: 'Password reset successfully' })
   }
+
+  /**
+   * @me
+   * @description Returns the authenticated user's data from the session and their related public profiles IDs.
+   * @tag Auth
+   * @responseBody 200 - { "idUser": "number", "email": "string", "name": "string", "role": "string", "idClient": "number", "idCompany": "number", "idDriver": "number" }
+   * @responseBody 401 - { "message": "Unauthorized" }
+   */
+  async me({ auth, response }: HttpContext) {
+    try {
+      // Autenticar y obtener al usuario (si falla, lanza excepción que atrapamos)
+      const user = await auth.use('api').authenticate()
+      // Cargar relaciones necesarias para extraer los roles y los "IDs públicos"
+      await user.load('role')
+      await user.load('client')
+      await user.load('company')
+      await user.load('driver')
+
+      return response.ok({
+        idUser: user.idUser,
+        email: user.email,
+        name: user.name,
+        role: user.role?.name || null,
+        // Retornar los IDs, si el usuario no tiene ese perfil será null
+        idClient: user.client?.idClient || null,
+        idCompany: user.company?.idCompany || null,
+        idDriver: user.driver?.idDriver || null,
+      })
+    } catch (error: any) {
+      console.error('Error in AuthController.me:', error)
+      // Token missing, expired, or invalid OR error loading relations
+      return response.unauthorized({ message: 'Unauthorized', error: error.message })
+    }
+  }
 }
