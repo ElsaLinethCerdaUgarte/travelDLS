@@ -56,7 +56,7 @@ router
     router.delete('/:id', [DriversController, 'destroy'])
   })
   .prefix('/api/drivers')
-  .use([middleware.auth(), middleware.roleGuard(['company'])])
+  .use([middleware.auth(), middleware.roleGuard(['company', 'platform_admin'])])
 
 router
   .put('/api/drivers/:id', [DriversController, 'update'])
