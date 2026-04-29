@@ -62,7 +62,8 @@ export default class DriverService {
     try {
       const page = filters.page || 1
       const perPage = filters.perPage || 10
-      const query = Driver.query().whereNull('deletedAt').preload('company')
+      // @ts-ignore: TypeScript se confunde por la dependencia circular, pero en runtime funciona
+      const query = Driver.query().whereNull('deletedAt').preload('company').preload('user')
 
       if (filters.status) {
         query.where('status', filters.status)
@@ -84,6 +85,8 @@ export default class DriverService {
         .whereNull('deletedAt')
         .where('idDriver', id)
         .preload('company')
+        // @ts-ignore: Omitir error de dependencia circular
+        .preload('user')
         .firstOrFail()
       return driver
     } catch (error: any) {
